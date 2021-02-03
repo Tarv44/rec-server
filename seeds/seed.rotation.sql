@@ -6,7 +6,7 @@ VALUES
     ('rajDawg', 'sleepyLife@gmail.com', 'Bones4Days'),
     ('sunnyD', 'daniellekryce@gmail.com', 'violin4268');
 
-INSERT INTO exchanges (created_by, title, description)
+INSERT INTO rotation_exchanges (created_by, title, description)
 VALUES
     ( 1, 'The Roots', 'The quintessential hip-hop band'),
     ( 1, 'Kiwi/Aussie Rock', 
