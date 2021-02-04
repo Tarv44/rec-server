@@ -1,6 +1,9 @@
 const path = require('path')
 const express = require('express')
 const xss = require('xss')
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 const UsersService = require('./users-service')
 const ExchagesService = require('../exchanges/exchanges-service')
 
@@ -27,8 +30,8 @@ usersRouter
     })
     .post(jsonParser, (req, res, next) => {
         const { username, email, password } = req.body
-        const newUser = { username, password, email: email.toLowerCase()}
-
+        const newUser = { username, email: email.toLowerCase()}
+        
         for (const [key, value] of Object.entries(newUser)) {
             if (value === null) {
                 return res.status(400).json({
@@ -53,15 +56,22 @@ usersRouter
                                     error: { message: 'Username unavailble.' }
                                 })
                             } else {
-                                UsersService.insertUser(
-                                    req.app.get('db'),
-                                    newUser
-                                  )
-                                    .then(user => {
-                                      res
-                                        .status(201)
-                                        .location(path.posix.join(req.originalUrl, `/${user.id}`))
-                                        .json(user)
+                                bcrypt.hash(password, saltRounds)
+                                    .then(hash => {
+                                        newUser.password = hash
+                                        UsersService.insertUser(
+                                            req.app.get('db'),
+                                            newUser
+                                          )
+                                            .then(user => {
+                                                const {id, username} = user
+                                                const response = {id, username}
+                                                res
+                                                    .status(201)
+                                                    .location(path.posix.join(req.originalUrl, `/${user.id}`))
+                                                    .json(response)
+                                            })
+                                            .catch(next)
                                     })
                                     .catch(next)
                             }
@@ -85,7 +95,7 @@ usersRouter
                     return res.status(404).json({
                         error: { message: `User doesn't exist` }
                     })
-                } else if (user.password !== req.body.password) {
+                } else if ( !bcrypt.compare(req.body.password, user.password) ) {
                     return res.status(401).json({
                         error: { message: 'Incorrect Password' }
                     })

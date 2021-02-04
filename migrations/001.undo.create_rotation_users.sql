@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS rotation_users;
+DROP TABLE IF EXISTS rotation_users CASCADE;
