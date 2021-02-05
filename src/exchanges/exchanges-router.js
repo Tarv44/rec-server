@@ -119,7 +119,7 @@ exchangesRouter
                         })
                         Promise.all(songComments).then(() => {
                             exchangeData.songs = songs
-                            res.json(exchangeData)
+                            res.status(200).json(exchangeData)
                         })  
                     })
                     .catch(next)

@@ -1,6 +1,5 @@
 const path = require('path')
 const express = require('express')
-const xss = require('xss')
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -9,14 +8,6 @@ const ExchagesService = require('../exchanges/exchanges-service')
 
 const usersRouter = express.Router()
 const jsonParser = express.json()
-
-// const serializeUser = user => ({
-//     id: user.id,
-//     username: xss(user.username),
-//     email: xss(user.email),
-//     password: xss(user.password),
-//     date_created: user.date_created,
-//   })
 
 usersRouter
     .route('/')
@@ -110,7 +101,7 @@ usersRouter
                     id: user.id,
                     username: user.username
                 }
-                res.json(userInfo)
+                res.status(201).json(userInfo)
             })
             .catch(next)
     })
