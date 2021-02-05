@@ -24,7 +24,13 @@ usersRouter
         const db = req.app.get('db')
         UsersService.getAllUsers(db)
             .then(users => {
-                res.json(users)
+                const response = users.map(user => {
+                    return {
+                        id: user.id,
+                        username: user.username
+                    }
+                })
+                res.json(response)
             })
             .catch(next)
     })
@@ -85,7 +91,7 @@ usersRouter
 
 usersRouter
     .route('/login')
-    .get(jsonParser, (req, res, next) => {
+    .post(jsonParser, (req, res, next) => {
         UsersService.getByEmail(
             req.app.get('db'),
             req.body.email.toLowerCase()
@@ -93,11 +99,11 @@ usersRouter
             .then(user => {
                 if (!user) {
                     return res.status(404).json({
-                        error: { message: `User doesn't exist` }
+                        error: { message: `Account with email doesn't exist.` }
                     })
-                } else if ( !bcrypt.compare(req.body.password, user.password) ) {
+                } else if ( !bcrypt.compare(req.body.password, user.password) || req.body.password !== user.password) {
                     return res.status(401).json({
-                        error: { message: 'Incorrect Password' }
+                        error: { message: 'Incorrect password.' }
                     })
                 }
                 const userInfo = {

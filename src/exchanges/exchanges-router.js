@@ -101,9 +101,10 @@ exchangesRouter
                         error: { message: `Exchange doesn't exist.` }
                     })
                 }
-                const { id, date_created, title, description } = ex
+                const { id, date_created, created_by, title, description } = ex
                 exchangeData.id = id
                 exchangeData.date_created = date_created
+                exchangeData.created_by = created_by
                 exchangeData.title = title
                 exchangeData.description = description
 

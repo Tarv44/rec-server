@@ -2,7 +2,7 @@ BEGIN;
 
 INSERT INTO rotation_users (username, email, password)
 VALUES
-    ('user', 'jonahdevine@gmail.com', '1234'),
+    ('user', 'user@test.com', '1234'),
     ('rajDawg', 'sleepyLife@gmail.com', 'Bones4Days'),
     ('sunnyD', 'daniellekryce@gmail.com', 'violin4268');
 
