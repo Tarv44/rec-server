@@ -12,8 +12,9 @@
     "prereseed": "npm run migrate -- 0 && npm run migrate",
     "reseed": "psql -U jonahtarver -d rotation -f ~/coding/thinkful/rotation-server/seeds/seed.rotation.sql",
     "start": "node src/server.js",
-    "predeploy": "npm audit",
-    "deploy": "git push heroku main"
+    "predeploy": "npm audit && npm run migrate:production",
+    "deploy": "git push heroku main",
+    "postdeploy": "npm run migrate:production"
   },
   "keywords": [],
   "engines": {
@@ -30,13 +31,13 @@
     "knex": "^0.21.17",
     "morgan": "^1.10.0",
     "pg": "^8.5.1",
+    "postgrator-cli": "^3.2.0",
     "xss": "^1.0.8"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^8.2.1",
     "nodemon": "^2.0.6",
-    "postgrator-cli": "^3.2.0",
     "supertest": "^6.0.1"
   }
 }
